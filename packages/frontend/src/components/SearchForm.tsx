@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import type { SearchHotelsRequest } from '../api';
+import { AlertIcon, PinIcon, SearchIcon } from './icons';
 
 interface SearchFormProps {
   disabled: boolean;
@@ -30,44 +31,56 @@ export function SearchForm({ disabled, onSubmit }: SearchFormProps) {
   }
 
   return (
-    <form className="search-form" onSubmit={handleSubmit}>
+    <form className="search-form" onSubmit={handleSubmit} noValidate>
       <div className="field">
         <label htmlFor="city">City</label>
-        <input
-          id="city"
-          type="text"
-          value={city}
-          onChange={(event) => setCity(event.target.value)}
-          placeholder="e.g. Paris"
-          disabled={disabled}
-        />
+        <div className="input-with-icon">
+          <PinIcon className="input-icon" />
+          <input
+            id="city"
+            type="text"
+            value={city}
+            onChange={(event) => setCity(event.target.value)}
+            placeholder="e.g. Paris, Tokyo, New York"
+            disabled={disabled}
+            autoComplete="off"
+          />
+        </div>
       </div>
 
-      <div className="field">
-        <label htmlFor="checkInDate">Check-in date</label>
-        <input
-          id="checkInDate"
-          type="date"
-          value={checkInDate}
-          onChange={(event) => setCheckInDate(event.target.value)}
-          disabled={disabled}
-        />
+      <div className="field-row">
+        <div className="field">
+          <label htmlFor="checkInDate">Check-in</label>
+          <input
+            id="checkInDate"
+            type="date"
+            value={checkInDate}
+            onChange={(event) => setCheckInDate(event.target.value)}
+            disabled={disabled}
+          />
+        </div>
+
+        <div className="field">
+          <label htmlFor="checkOutDate">Check-out</label>
+          <input
+            id="checkOutDate"
+            type="date"
+            value={checkOutDate}
+            onChange={(event) => setCheckOutDate(event.target.value)}
+            disabled={disabled}
+          />
+        </div>
       </div>
 
-      <div className="field">
-        <label htmlFor="checkOutDate">Check-out date</label>
-        <input
-          id="checkOutDate"
-          type="date"
-          value={checkOutDate}
-          onChange={(event) => setCheckOutDate(event.target.value)}
-          disabled={disabled}
-        />
-      </div>
+      {validationError && (
+        <p className="field-error">
+          <AlertIcon className="icon-sm" />
+          {validationError}
+        </p>
+      )}
 
-      {validationError && <p className="field-error">{validationError}</p>}
-
-      <button type="submit" disabled={disabled}>
+      <button type="submit" disabled={disabled} className="submit-button">
+        <SearchIcon className="icon-sm" />
         {disabled ? 'Searching…' : 'Search hotels'}
       </button>
     </form>

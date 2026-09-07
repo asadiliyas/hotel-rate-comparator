@@ -5,7 +5,7 @@ interface CancelButtonProps {
 
 export function CancelButton({ onCancel, disabled }: CancelButtonProps) {
   return (
-    <button type="button" className="link-button" onClick={onCancel} disabled={disabled}>
+    <button type="button" className="cancel-pill" onClick={onCancel} disabled={disabled}>
       {disabled ? 'Cancelling…' : 'Cancel search'}
     </button>
   );

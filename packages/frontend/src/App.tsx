@@ -3,8 +3,10 @@ import type { HotelRate, SupplierName } from '@hotel-comparator/shared';
 import { cancelSearch, getSearchResult, startSearch } from './api';
 import type { SearchHotelsRequest } from './api';
 import { CancelButton } from './components/CancelButton';
+import { Header } from './components/Header';
 import { ResultCard } from './components/ResultCard';
 import { SearchForm } from './components/SearchForm';
+import { AlertIcon, InfoIcon } from './components/icons';
 
 type Status = 'idle' | 'loading' | 'success' | 'no-results' | 'error';
 
@@ -52,30 +54,39 @@ function App() {
   }
 
   return (
-    <main className="page">
-      <h1>Hotel Rate Comparator</h1>
-      <p className="subtitle">Compares live offers from two suppliers through a Temporal workflow.</p>
+    <div className="page">
+      <div className="page-inner">
+        <Header />
 
-      <SearchForm disabled={status === 'loading'} onSubmit={handleSearch} />
+        <SearchForm disabled={status === 'loading'} onSubmit={handleSearch} />
 
-      {status === 'loading' && (
-        <div className="status-panel loading">
-          <span className="spinner" aria-hidden="true" />
-          <span>Searching suppliers…</span>
-          {workflowId && <CancelButton onCancel={handleCancel} disabled={cancelling} />}
-        </div>
-      )}
+        {status === 'loading' && (
+          <div className="status-panel loading">
+            <span className="spinner" aria-hidden="true" />
+            <span className="loading-text">Searching Supplier A &amp; Supplier B…</span>
+            {workflowId && <CancelButton onCancel={handleCancel} disabled={cancelling} />}
+          </div>
+        )}
 
-      {status === 'success' && hotel && <ResultCard hotel={hotel} />}
+        {status === 'success' && hotel && <ResultCard hotel={hotel} />}
 
-      {status === 'no-results' && <div className="status-panel info">No hotels found for that search.</div>}
+        {status === 'no-results' && (
+          <div className="status-panel info">
+            <InfoIcon className="icon-sm" />
+            No hotels found for that search. Try a different city or dates.
+          </div>
+        )}
 
-      {status === 'error' && errorMessage && (
-        <div className="status-panel error" role="alert">
-          {errorMessage}
-        </div>
-      )}
-    </main>
+        {status === 'error' && errorMessage && (
+          <div className="status-panel error" role="alert">
+            <AlertIcon className="icon-sm" />
+            {errorMessage}
+          </div>
+        )}
+
+        <footer className="page-footer">Orchestrated end-to-end with Temporal workflows.</footer>
+      </div>
+    </div>
   );
 }
 
