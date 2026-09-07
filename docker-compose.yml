@@ -1,0 +1,12 @@
+services:
+  temporal:
+    image: temporalio/temporal:latest
+    command: server start-dev --ip 0.0.0.0 --db-filename /home/temporal/temporal.db
+    ports:
+      - "7233:7233" # gRPC frontend (worker/client connect here)
+      - "8233:8233" # Web UI
+    volumes:
+      - temporal-data:/home/temporal
+
+volumes:
+  temporal-data:

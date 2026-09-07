@@ -1,0 +1,26 @@
+{
+  "name": "hotel-rate-comparator",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Hotel rate comparator backed by Temporal workflows",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.3.0"
+  },
+  "scripts": {
+    "dev": "concurrently -n suppliers,worker,api,frontend -c green,yellow,blue,magenta \"npm:dev:suppliers\" \"npm:dev:worker\" \"npm:dev:api\" \"npm:dev:frontend\"",
+    "dev:suppliers": "npm run dev --workspace=packages/suppliers",
+    "dev:worker": "npm run dev:worker --workspace=packages/backend",
+    "dev:api": "npm run dev:api --workspace=packages/backend",
+    "dev:frontend": "npm run dev --workspace=packages/frontend",
+    "temporal:up": "docker compose up -d",
+    "temporal:down": "docker compose down",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
